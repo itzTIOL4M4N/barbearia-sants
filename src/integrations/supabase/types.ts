@@ -14,7 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          appointment_date: string
+          created_at: string
+          customer_name: string
+          customer_phone: string
+          id: string
+          service_id: string
+          status: string
+        }
+        Insert: {
+          appointment_date: string
+          created_at?: string
+          customer_name: string
+          customer_phone: string
+          id?: string
+          service_id: string
+          status?: string
+        }
+        Update: {
+          appointment_date?: string
+          created_at?: string
+          customer_name?: string
+          customer_phone?: string
+          id?: string
+          service_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          name: string
+          price: number
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          name: string
+          price: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          name?: string
+          price?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
