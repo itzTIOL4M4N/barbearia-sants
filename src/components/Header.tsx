@@ -1,60 +1,70 @@
 import { useState } from "react";
-import { Scissors, Menu, X } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Scissors, Menu, X, LogOut, User as UserIcon } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
-interface HeaderProps {
-  onBookClick: () => void;
-}
+const Header = () => {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user, role, signOut } = useAuth();
 
-const Header = ({ onBookClick }: HeaderProps) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const links = [
+    { to: "/catalogo", label: "Catálogo" },
+    { to: "/precos", label: "Preço" },
+    { to: "/sobre", label: "Sobre" },
+    { to: "/agendar", label: "Agendamento" },
+  ];
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <header className="py-5 border-b border-border sticky top-0 z-50 bg-background/80 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <Scissors className="w-6 h-6 text-primary" />
-          <span className="text-2xl font-heading font-semibold text-primary tracking-tight">
-            BarberKing
-          </span>
-        </div>
+          <span className="text-2xl font-heading font-semibold text-primary tracking-tight">BarberKing</span>
+        </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <a href="#servicos" className="text-sm hover:text-primary transition-colors">
-            Serviços
-          </a>
-          <a href="#agendar" className="text-sm hover:text-primary transition-colors">
-            Agendamento
-          </a>
-          <button
-            onClick={onBookClick}
-            className="px-6 py-2.5 gold-gradient text-primary-foreground font-medium rounded-lg text-sm hover:opacity-90 transition-opacity"
-          >
-            Agendar
-          </button>
+        <nav className="hidden md:flex items-center space-x-6">
+          {links.map((l) => (
+            <Link key={l.to} to={l.to} className="text-sm hover:text-primary transition-colors">{l.label}</Link>
+          ))}
+          {role === "barbeiro" && (
+            <Link to="/barbeiro" className="text-sm text-primary font-semibold">Painel</Link>
+          )}
+          {user ? (
+            <button onClick={handleLogout} className="flex items-center gap-1 text-sm hover:text-primary">
+              <LogOut className="w-4 h-4" /> Sair
+            </button>
+          ) : (
+            <Link to="/auth/cliente" className="flex items-center gap-1 px-4 py-2 gold-gradient text-primary-foreground font-medium rounded-lg text-sm">
+              <UserIcon className="w-4 h-4" /> Entrar
+            </Link>
+          )}
         </nav>
 
-        {/* Mobile menu button */}
-        <button className="md:hidden text-foreground" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>
+          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
-      {/* Mobile menu */}
-      {menuOpen && (
+      {open && (
         <div className="md:hidden px-6 py-4 border-t border-border space-y-3">
-          <a href="#servicos" className="block text-sm hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
-            Serviços
-          </a>
-          <a href="#agendar" className="block text-sm hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
-            Agendamento
-          </a>
-          <button
-            onClick={() => { onBookClick(); setMenuOpen(false); }}
-            className="w-full px-6 py-2.5 gold-gradient text-primary-foreground font-medium rounded-lg text-sm"
-          >
-            Agendar
-          </button>
+          {links.map((l) => (
+            <Link key={l.to} to={l.to} onClick={() => setOpen(false)}
+              className="block text-sm hover:text-primary">{l.label}</Link>
+          ))}
+          {role === "barbeiro" && (
+            <Link to="/barbeiro" onClick={() => setOpen(false)} className="block text-sm text-primary font-semibold">Painel</Link>
+          )}
+          {user ? (
+            <button onClick={() => { handleLogout(); setOpen(false); }} className="block text-sm">Sair</button>
+          ) : (
+            <Link to="/auth/cliente" onClick={() => setOpen(false)} className="block text-sm text-primary">Entrar</Link>
+          )}
         </div>
       )}
     </header>
