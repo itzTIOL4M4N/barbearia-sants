@@ -1,4 +1,4 @@
-import { Scissors } from "lucide-react";
+import { Scissors, Instagram, MapPin } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -9,6 +9,16 @@ const Footer = () => {
           <span className="text-xl font-heading font-semibold text-primary">
             BarberKing
           </span>
+        </div>
+        <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Instagram className="w-4 h-4 text-primary" />
+            <span>@barbeari_asants_</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" />
+            <span>Rua José Lagrange 34a</span>
+          </div>
         </div>
         <p className="text-muted-foreground text-center text-sm max-w-md">
           Tradição, estilo e precisão. Agende seu horário e venha viver a experiência.
