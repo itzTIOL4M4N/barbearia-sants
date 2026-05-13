@@ -26,7 +26,7 @@ const Header = () => {
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2">
           <Scissors className="w-6 h-6 text-primary" />
-          <span className="text-2xl font-heading font-semibold text-primary tracking-tight">BarberKing</span>
+          <span className="text-2xl font-heading font-semibold text-primary tracking-tight">Barbearia Sant's</span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">

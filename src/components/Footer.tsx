@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="flex items-center gap-2">
           <Scissors className="w-5 h-5 text-primary" />
           <span className="text-xl font-heading font-semibold text-primary">
-            BarberKing
+            Barbearia Sant's
           </span>
         </div>
         <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
@@ -24,7 +24,7 @@ const Footer = () => {
           Tradição, estilo e precisão. Agende seu horário e venha viver a experiência.
         </p>
         <p className="text-muted-foreground/50 text-xs">
-          © {new Date().getFullYear()} BarberKing. Todos os direitos reservados.
+          © {new Date().getFullYear()} Barbearia Sant's. Todos os direitos reservados.
         </p>
       </div>
     </footer>
