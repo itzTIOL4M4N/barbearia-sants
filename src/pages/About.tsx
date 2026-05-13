@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { MapPin, Clock, Phone, Award } from "lucide-react";
+import { MapPin, Clock, Instagram, Award } from "lucide-react";
 
 const About = () => (
   <div className="min-h-screen flex flex-col">
@@ -16,9 +16,9 @@ const About = () => (
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
-          { icon: <MapPin />, title: "Localização", text: "Rua das Tesouras, 123 — Centro" },
+          { icon: <MapPin />, title: "Localização", text: "Rua José Lagrange 34a" },
           { icon: <Clock />, title: "Horário", text: "Seg a Sáb · 09h às 20h" },
-          { icon: <Phone />, title: "Contato", text: "(11) 99999-9999" },
+          { icon: <Instagram />, title: "Contato", text: "@barbeari_asants_" },
           { icon: <Award />, title: "Experiência", text: "+10 anos de tradição" },
         ].map((item) => (
           <div key={item.title} className="p-6 rounded-xl bg-card border border-border flex gap-4">
