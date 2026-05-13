@@ -58,7 +58,7 @@ const Auth = () => {
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12">
       <Link to="/" className="flex items-center gap-2 mb-8">
         <Scissors className="w-6 h-6 text-primary" />
-        <span className="text-2xl font-heading font-semibold text-primary">BarberKing</span>
+        <span className="text-2xl font-heading font-semibold text-primary">Barbearia Sant's</span>
       </Link>
       <div className="w-full max-w-md p-8 rounded-xl bg-card border border-border">
         <h1 className="text-2xl font-heading font-semibold text-center mb-2">

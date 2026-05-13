@@ -7,7 +7,7 @@ const About = () => (
     <Header />
     <main className="flex-1 max-w-4xl mx-auto px-6 py-16 w-full">
       <h1 className="text-4xl md:text-5xl font-heading font-semibold text-primary text-center mb-6">
-        Sobre a BarberKing
+        Sobre a Barbearia Sant's
       </h1>
       <p className="text-lg text-muted-foreground text-center max-w-2xl mx-auto mb-12">
         Há mais de uma década oferecendo a melhor experiência em barbearia tradicional,

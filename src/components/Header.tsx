@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Scissors, Menu, X, LogOut, User as UserIcon } from "lucide-react";
+import { Menu, X, LogOut, User as UserIcon } from "lucide-react";
+import logo from "@/assets/logo.jpeg";
 import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
@@ -25,8 +26,8 @@ const Header = () => {
     <header className="py-5 border-b border-border sticky top-0 z-50 bg-background/80 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2">
-          <Scissors className="w-6 h-6 text-primary" />
-          <span className="text-2xl font-heading font-semibold text-primary tracking-tight">BarberKing</span>
+          <img src={logo} alt="Barbearia Sant's" className="w-10 h-10 rounded-full object-cover" />
+          <span className="text-2xl font-heading font-semibold text-primary tracking-tight">Barbearia Sant's</span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
