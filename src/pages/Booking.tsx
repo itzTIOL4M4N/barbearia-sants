@@ -160,9 +160,12 @@ const Booking = () => {
           <div>
             <h2 className="text-2xl font-heading font-semibold mb-4">Meus Agendamentos</h2>
             <div className="space-y-3">
-              {myAppointments.map((a: any) => (
-                <div key={a.id} className="p-4 rounded-lg bg-card border border-border flex justify-between items-center">
-                  <div>
+              {myAppointments.map((a: any) => {
+                const canCancel = a.status !== "cancelado" && a.status !== "concluido"
+                  && new Date(a.appointment_date).getTime() > Date.now();
+                return (
+                <div key={a.id} className="p-4 rounded-lg bg-card border border-border flex justify-between items-center gap-3">
+                  <div className="flex-1">
                     <p className="font-semibold">{a.services?.name}</p>
                     <p className="text-sm text-muted-foreground">
                       {new Date(a.appointment_date).toLocaleString("pt-BR")}
@@ -173,8 +176,20 @@ const Booking = () => {
                     a.status === "cancelado" ? "bg-destructive/20 text-destructive" :
                     "bg-secondary text-foreground"
                   }`}>{a.status}</span>
+                  {canCancel && (
+                    <button
+                      onClick={() => {
+                        if (confirm("Deseja desmarcar este agendamento?")) cancelMutation.mutate(a.id);
+                      }}
+                      disabled={cancelMutation.isPending}
+                      className="text-xs px-3 py-1.5 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20 font-medium"
+                    >
+                      Desmarcar
+                    </button>
+                  )}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
