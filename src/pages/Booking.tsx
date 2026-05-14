@@ -58,6 +58,18 @@ const Booking = () => {
     },
   });
 
+  const cancelMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("appointments").update({ status: "cancelado" }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Agendamento desmarcado");
+      queryClient.invalidateQueries({ queryKey: ["my-appointments"] });
+    },
+    onError: (e: any) => toast.error(e.message || "Erro ao desmarcar"),
+  });
+
   const mutation = useMutation({
     mutationFn: async () => {
       const { error } = await supabase.from("appointments").insert({
