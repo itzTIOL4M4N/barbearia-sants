@@ -38,9 +38,16 @@ const Header = () => {
             <Link to="/barbeiro" className="text-sm text-primary font-semibold">Painel</Link>
           )}
           {user ? (
-            <button onClick={handleLogout} className="flex items-center gap-1 text-sm hover:text-primary">
-              <LogOut className="w-4 h-4" /> Sair
-            </button>
+            <>
+              <span className={`text-xs px-2 py-1 rounded-full font-semibold capitalize ${
+                role === "barbeiro" ? "bg-primary/20 text-primary" : "bg-secondary text-foreground"
+              }`}>
+                {role || "..."}
+              </span>
+              <button onClick={handleLogout} className="flex items-center gap-1 text-sm hover:text-primary">
+                <LogOut className="w-4 h-4" /> Sair
+              </button>
+            </>
           ) : (
             <Link to="/auth/cliente" className="flex items-center gap-1 px-4 py-2 gold-gradient text-primary-foreground font-medium rounded-lg text-sm">
               <UserIcon className="w-4 h-4" /> Entrar
