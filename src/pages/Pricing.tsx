@@ -7,7 +7,7 @@ const Pricing = () => {
   const { data: services } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("services").select("*").order("category").order("price");
+      const { data, error } = await supabase.from("services").select("*").order("name");
       if (error) throw error;
       return data;
     },
