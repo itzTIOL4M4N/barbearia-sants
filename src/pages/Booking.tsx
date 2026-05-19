@@ -5,8 +5,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { CalendarIcon, Clock, User, Phone } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+
+const TIME_SLOTS = Array.from({ length: 12 }, (_, i) => {
+  const h = 9 + i; // 9..20
+  return `${String(h).padStart(2, "0")}:00`;
+});
 
 const Booking = () => {
   const { user, loading } = useAuth();
@@ -17,7 +27,8 @@ const Booking = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [serviceId, setServiceId] = useState(params.get("service") || "");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<Date | undefined>();
+  const [time, setTime] = useState<string>("");
 
   useEffect(() => {
     if (!loading && !user) navigate("/auth/cliente");
@@ -72,12 +83,15 @@ const Booking = () => {
 
   const mutation = useMutation({
     mutationFn: async () => {
+      const [hh, mm] = time.split(":").map(Number);
+      const d = new Date(date!);
+      d.setHours(hh, mm, 0, 0);
       const { error } = await supabase.from("appointments").insert({
         user_id: user!.id,
         customer_name: name.trim(),
         customer_phone: phone.trim(),
         service_id: serviceId,
-        appointment_date: new Date(date).toISOString(),
+        appointment_date: d.toISOString(),
       });
       if (error) throw error;
     },
@@ -85,7 +99,8 @@ const Booking = () => {
       toast.success("Agendamento confirmado!", {
         description: "Você receberá uma confirmação. Aguardamos você!",
       });
-      setDate("");
+      setDate(undefined);
+      setTime("");
       queryClient.invalidateQueries({ queryKey: ["my-appointments"] });
     },
     onError: (e: any) => toast.error(e.message || "Erro ao agendar"),
@@ -93,8 +108,25 @@ const Booking = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim() || !serviceId || !date) {
+    if (!name.trim() || !phone.trim() || !serviceId || !date || !time) {
       toast.error("Preencha todos os campos");
+      return;
+    }
+    const day = date.getDay(); // 0=Dom, 1=Seg, 2=Ter..6=Sab
+    if (day === 0 || day === 1) {
+      toast.error("Atendemos somente de terça a sábado");
+      return;
+    }
+    const [hh] = time.split(":").map(Number);
+    if (hh < 9 || hh > 20) {
+      toast.error("Horário disponível das 9h às 20h");
+      return;
+    }
+    const [h, m] = time.split(":").map(Number);
+    const chosen = new Date(date);
+    chosen.setHours(h, m, 0, 0);
+    if (chosen.getTime() <= Date.now()) {
+      toast.error("Escolha um horário futuro");
       return;
     }
     mutation.mutate();
@@ -142,14 +174,59 @@ const Booking = () => {
               <span className="text-primary font-semibold">{selected.name}</span> · {selected.duration_minutes} min · <span className="text-primary font-bold">R${selected.price}</span>
             </div>
           )}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-2">
-              <CalendarIcon className="w-4 h-4 text-primary" /> Data e Horário
-            </label>
-            <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)}
-              min={new Date().toISOString().slice(0, 16)}
-              className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary outline-none" />
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium mb-2">
+                <CalendarIcon className="w-4 h-4 text-primary" /> Data
+              </label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button type="button"
+                    className={cn(
+                      "w-full px-4 py-3 rounded-lg bg-background border border-border text-left flex items-center justify-between hover:border-primary/60 transition",
+                      !date && "text-muted-foreground"
+                    )}>
+                    {date ? format(date, "PPP", { locale: ptBR }) : "Selecione a data"}
+                    <CalendarIcon className="w-4 h-4 opacity-60" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 bg-white text-slate-900 border border-slate-200 shadow-xl" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    locale={ptBR}
+                    initialFocus
+                    disabled={(d) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      if (d < today) return true;
+                      const wd = d.getDay();
+                      return wd === 0 || wd === 1; // bloqueia Dom e Seg
+                    }}
+                    className={cn("p-3 pointer-events-auto bg-white text-slate-900 [&_button]:text-slate-900 [&_.rdp-day_selected]:!bg-primary [&_.rdp-day_selected]:!text-primary-foreground [&_button:hover]:bg-slate-100")}
+                  />
+                  <p className="px-3 pb-3 text-xs text-slate-500">Atendemos de terça a sábado</p>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium mb-2">
+                <Clock className="w-4 h-4 text-primary" /> Horário
+              </label>
+              <select value={time} onChange={(e) => setTime(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary outline-none">
+                <option value="">Selecione...</option>
+                {TIME_SLOTS.map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+              <p className="text-xs text-muted-foreground mt-1">Das 9h às 20h</p>
+            </div>
           </div>
+
           <button type="submit" disabled={mutation.isPending}
             className="w-full py-4 gold-gradient text-primary-foreground font-semibold rounded-lg text-lg hover:opacity-90 disabled:opacity-50">
             {mutation.isPending ? "Agendando..." : "Confirmar Agendamento"}
