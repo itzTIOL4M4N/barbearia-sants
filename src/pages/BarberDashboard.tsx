@@ -16,7 +16,9 @@ const BarberDashboard = () => {
   const [month, setMonth] = useState(() => new Date().toISOString().slice(0, 7));
 
   useEffect(() => {
-    if (!loading && (!user || role !== "barbeiro")) navigate("/auth/barbeiro");
+    if (loading) return;
+    if (!user) { navigate("/auth/barbeiro"); return; }
+    if (role && role !== "barbeiro") navigate("/auth/barbeiro");
   }, [user, role, loading, navigate]);
 
   const { data: appointments } = useQuery({
