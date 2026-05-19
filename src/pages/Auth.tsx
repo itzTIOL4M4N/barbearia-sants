@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { Scissors } from "lucide-react";
+import { Scissors, Eye, EyeOff } from "lucide-react";
 
 const Auth = () => {
   const { tipo } = useParams<{ tipo: "cliente" | "barbeiro" }>();
@@ -17,6 +17,7 @@ const Auth = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (user && currentRole) {
@@ -79,8 +80,15 @@ const Auth = () => {
           )}
           <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-mail"
             className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary outline-none" />
-          <input required type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" minLength={6}
-            className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary outline-none" />
+          <div className="relative">
+            <input required type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" minLength={6}
+              className="w-full px-4 py-3 pr-12 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary outline-none" />
+            <button type="button" onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary">
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
 
           <button type="submit" disabled={loading}
             className="w-full py-3 gold-gradient text-primary-foreground font-semibold rounded-lg hover:opacity-90 disabled:opacity-50">
