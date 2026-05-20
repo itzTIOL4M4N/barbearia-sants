@@ -13,9 +13,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-const TIME_SLOTS = Array.from({ length: 12 }, (_, i) => {
-  const h = 9 + i; // 9..20
-  return `${String(h).padStart(2, "0")}:00`;
+// 9:00 até 19:30, de 30 em 30 min
+const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {
+  const total = 9 * 60 + i * 30;
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 });
 
 const Booking = () => {
