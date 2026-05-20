@@ -14,7 +14,7 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Instagram className="w-4 h-4 text-primary" />
-            <span>@barbeari_asants_</span>
+            <span>barbeariasants__</span>
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary" />

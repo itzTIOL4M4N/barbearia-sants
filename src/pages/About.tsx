@@ -18,7 +18,7 @@ const About = () => (
         {[
           { icon: <MapPin />, title: "Localização", text: "Rua José Lagrange 34a" },
           { icon: <Clock />, title: "Horário", text: "Seg a Sáb · 09h às 20h" },
-          { icon: <Instagram />, title: "Contato", text: "@barbeari_asants_" },
+          { icon: <Instagram />, title: "Contato", text: "barbeariasants__" },
           { icon: <Award />, title: "Experiência", text: "+10 anos de tradição" },
         ].map((item) => (
           <div key={item.title} className="p-6 rounded-xl bg-card border border-border flex gap-4">
