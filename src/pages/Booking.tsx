@@ -120,9 +120,10 @@ const Booking = () => {
       toast.error("Atendemos somente de terça a sábado");
       return;
     }
-    const [hh] = time.split(":").map(Number);
-    if (hh < 9 || hh > 20) {
-      toast.error("Horário disponível das 9h às 20h");
+    const [hh, mm] = time.split(":").map(Number);
+    const slotMin = hh * 60 + mm;
+    if (slotMin < 9 * 60 || slotMin > 19 * 60 + 30) {
+      toast.error("Horário disponível das 9h às 19h30");
       return;
     }
     const [h, m] = time.split(":").map(Number);
