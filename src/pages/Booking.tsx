@@ -227,7 +227,7 @@ const Booking = () => {
                   <option key={t} value={t}>{t}</option>
                 ))}
               </select>
-              <p className="text-xs text-muted-foreground mt-1">Das 9h às 20h</p>
+              <p className="text-xs text-muted-foreground mt-1">Das 9h às 19h30 (intervalos de 30 min)</p>
             </div>
           </div>
 
