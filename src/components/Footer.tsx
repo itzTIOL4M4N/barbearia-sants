@@ -14,7 +14,14 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Instagram className="w-4 h-4 text-primary" />
-            <span>barbeariasants__</span>
+            <a
+              href="https://www.instagram.com/barbeariasants__/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary hover:underline"
+            >
+              barbeariasants__
+            </a>
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary" />
