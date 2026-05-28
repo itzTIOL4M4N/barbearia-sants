@@ -1,4 +1,5 @@
-# Barbearia SANT´S
+# Vídeo do Youtube
 
-TODO: Document your project here
-Sistema de agendamento de Corte de Cabelo
+ Esse vídeo explica como funciona o agendamento da barbearia.
+ Link: https://youtu.be/lZ7Xb1PVt6M?si=UD_BEaOIs6l1bquL
+
